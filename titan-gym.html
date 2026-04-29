@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Titan Gym – Forge Your Legacy</title>
+  <meta name="description" content="Titan Gym – Premium fitness experience. Join thousands of members transforming their bodies and minds. Expert trainers, world-class equipment, proven results." />
+  <meta name="keywords" content="gym, fitness, personal training, membership, titan gym, workout" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <style>
+    :root {
+      --red: #e8192c;
+      --red-dark: #b0101f;
+      --red-glow: rgba(232,25,44,0.35);
+      --neon: #ff3347;
+      --bg: #080808;
+      --bg2: #0f0f0f;
+      --bg3: #141414;
+      --bg4: #1a1a1a;
+      --surface: #1e1e1e;
+      --border: #2a2a2a;
+      --text: #f0f0f0;
+      --text-muted: #888;
+      --text-dim: #555;
+      --gold: #c9a84c;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 3px; }
+
+    /* GLOBAL */
+    .display { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.04em; }
+    .condensed { font-family: 'Barlow Condensed', sans-serif; }
+    .section { padding: 100px 0; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    .tag {
+      display: inline-block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--red);
+      border-left: 3px solid var(--red);
+      padding-left: 10px;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(42px, 6vw, 80px);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+      margin-bottom: 20px;
+    }
+    .red { color: var(--red); }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--red);
+      color: #fff;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      border: none;
+      cursor: pointer;
+      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+      transition: all 0.25s;
+      text-decoration: none;
+    }
+    .btn-primary:hover { background: #ff2233; box-shadow: 0 0 30px var(--red-glow); transform: translateY(-2px); }
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      color: var(--text);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 15px 36px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+      transition: all 0.25s;
+      text-decoration: none;
+    }
+    .btn-outline:hover { border-color: var(--red); color: var(--red); }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      transition: all 0.3s;
+    }
+    nav.scrolled {
+      background: rgba(8,8,8,0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .logo span { color: var(--red); }
+    .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content:''; position:absolute; bottom:-4px; left:0; width:0; height:2px;
+      background:var(--red); transition:width 0.3s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { width:100%; }
+    .nav-links a.active { color: var(--red); }
+    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:4px; }
+    .hamburger span { display:block; width:24px; height:2px; background:var(--text); transition:all 0.3s; }
+    .mobile-menu {
+      display:none; position:fixed; inset:0; background:var(--bg);
+      z-index:999; flex-direction:column; align-items:center; justify-content:center; gap:32px;
+    }
+    .mobile-menu.open { display:flex; }
+    .mobile-menu a {
+      font-family:'Bebas Neue',sans-serif; font-size:48px; letter-spacing:0.06em;
+      color:var(--text); text-decoration:none; transition:color 0.2s;
+    }
+    .mobile-menu a:hover { color:var(--red); }
+
+    /* HERO */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(232,25,44,0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, rgba(8,8,8,0.3) 0%, rgba(8,8,8,0.85) 100%),
+        url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1800&q=80') center/cover no-repeat;
+    }
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(232,25,44,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,25,44,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+      padding-top: 120px;
+    }
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.7s ease both;
+    }
+    .hero-eyebrow-line { width: 40px; height: 2px; background: var(--red); }
+    .hero-eyebrow span {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--red);
+    }
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(72px, 12vw, 160px);
+      line-height: 0.88;
+      letter-spacing: 0.02em;
+      margin-bottom: 32px;
+      animation: fadeInUp 0.7s 0.15s ease both;
+    }
+    .hero-title .outline {
+      -webkit-text-stroke: 2px rgba(240,240,240,0.25);
+      color: transparent;
+    }
+    .hero-desc {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin-bottom: 48px;
+      line-height: 1.7;
+      animation: fadeInUp 0.7s 0.3s ease both;
+    }
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.7s 0.45s ease both;
+    }
+    .hero-stats {
+      position: absolute;
+      bottom: 60px;
+      right: 24px;
+      display: flex;
+      gap: 40px;
+      z-index: 2;
+    }
+    .hero-stat { text-align: right; }
+    .hero-stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      color: var(--red);
+      line-height: 1;
+    }
+    .hero-stat-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      z-index: 2;
+      animation: bounce 2s infinite;
+    }
+    .hero-scroll span {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .hero-scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--red), transparent); }
+
+    /* TICKER */
+    .ticker {
+      background: var(--red);
+      padding: 14px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .ticker-inner {
+      display: inline-flex;
+      gap: 60px;
+      animation: ticker 20s linear infinite;
+    }
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 20px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.1em;
+      color: #fff;
+    }
+    .ticker-dot { width: 6px; height: 6px; background: rgba(255,255,255,0.5); border-radius: 50%; }
+
+    /* ABOUT */
+    #about { background: var(--bg2); }
+    .about-img-wrap {
+      position: relative;
+    }
+    .about-img {
+      width: 100%;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      filter: grayscale(20%) contrast(1.1);
+    }
+    .about-img-accent {
+      position: absolute;
+      bottom: -24px;
+      right: -24px;
+      width: 120px;
+      height: 120px;
+      background: var(--red);
+      z-index: -1;
+    }
+    .about-img-badge {
+      position: absolute;
+      top: 32px;
+      left: -24px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 20px 24px;
+    }
+    .about-img-badge-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      color: var(--red);
+      line-height: 1;
+    }
+    .about-img-badge-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .about-features { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .about-feature {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      transition: border-color 0.3s;
+    }
+    .about-feature:hover { border-color: var(--red); }
+    .about-feature-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(232,25,44,0.1);
+      border: 1px solid rgba(232,25,44,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .about-feature-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .about-feature-text { font-size: 13px; color: var(--text-muted); }
+
+    /* COUNTERS */
+    .counters { background: var(--red); padding: 80px 0; }
+    .counters-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .counter-item {
+      text-align: center;
+      padding: 20px;
+      border-right: 1px solid rgba(255,255,255,0.2);
+      position: relative;
+    }
+    .counter-item:last-child { border-right: none; }
+    .counter-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px;
+      line-height: 1;
+      color: #fff;
+    }
+    .counter-suffix { color: rgba(255,255,255,0.6); }
+    .counter-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.75);
+      margin-top: 8px;
+    }
+
+    /* CLASSES */
+    #classes { background: var(--bg); }
+    .classes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 60px; }
+    .class-card {
+      position: relative;
+      aspect-ratio: 4/5;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .class-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(50%) brightness(0.6);
+      transition: all 0.5s;
+    }
+    .class-card:hover img { filter: grayscale(0%) brightness(0.4); transform: scale(1.05); }
+    .class-card-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px;
+    }
+    .class-card-tag {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 8px;
+    }
+    .class-card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 38px;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .class-card-meta {
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      font-family: 'Barlow Condensed', sans-serif;
+    }
+    .class-card-arrow {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      background: var(--red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 20px;
+    }
+    .class-card:hover .class-card-arrow { opacity: 1; }
+
+    /* SCHEDULE */
+    #schedule { background: var(--bg2); }
+    .schedule-table { margin-top: 60px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: var(--red); }
+    th {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 16px 20px;
+      text-align: left;
+    }
+    td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+      color: var(--text-muted);
+      vertical-align: middle;
+    }
+    tr:hover td { background: var(--surface); color: var(--text); }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .badge-red { background: rgba(232,25,44,0.15); color: var(--red); border: 1px solid rgba(232,25,44,0.3); }
+    .badge-green { background: rgba(50,200,100,0.1); color: #32c864; border: 1px solid rgba(50,200,100,0.3); }
+    .badge-blue { background: rgba(50,150,255,0.1); color: #3296ff; border: 1px solid rgba(50,150,255,0.3); }
+    .badge-gold { background: rgba(201,168,76,0.1); color: var(--gold); border: 1px solid rgba(201,168,76,0.3); }
+
+    /* TRAINERS */
+    #trainers { background: var(--bg); }
+    .trainers-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 60px; }
+    .trainer-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .trainer-card:hover { border-color: var(--red); transform: translateY(-6px); }
+    .trainer-img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      filter: grayscale(30%);
+      transition: filter 0.4s;
+    }
+    .trainer-card:hover .trainer-img { filter: grayscale(0%); }
+    .trainer-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to top, rgba(8,8,8,0.95) 0%, transparent 60%);
+    }
+    .trainer-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 24px;
+    }
+    .trainer-spec {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 6px;
+    }
+    .trainer-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 30px;
+      letter-spacing: 0.04em;
+    }
+    .trainer-socials {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s;
+    }
+    .trainer-card:hover .trainer-socials { opacity: 1; transform: translateY(0); }
+    .trainer-social {
+      width: 32px;
+      height: 32px;
+      background: var(--red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    /* MEMBERSHIP */
+    #membership { background: var(--bg2); }
+    .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 60px; }
+    .plan-card {
+      border: 1px solid var(--border);
+      padding: 40px 32px;
+      position: relative;
+      transition: border-color 0.3s, transform 0.3s;
+      background: var(--surface);
+    }
+    .plan-card:hover { border-color: var(--red); transform: translateY(-4px); }
+    .plan-card.featured {
+      border-color: var(--red);
+      background: linear-gradient(135deg, rgba(232,25,44,0.08) 0%, var(--surface) 100%);
+    }
+    .featured-badge {
+      position: absolute;
+      top: -1px;
+      right: 32px;
+      background: var(--red);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+    }
+    .plan-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+    .plan-price-wrap { margin-bottom: 32px; }
+    .plan-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 72px;
+      line-height: 1;
+      color: var(--text);
+    }
+    .plan-price-curr {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--red);
+      vertical-align: top;
+      margin-top: 12px;
+      display: inline-block;
+    }
+    .plan-period {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-left: 4px;
+    }
+    .plan-features { list-style: none; margin-bottom: 36px; }
+    .plan-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+    .plan-features li:last-child { border-bottom: none; }
+    .plan-features li.included { color: var(--text); }
+    .check { color: var(--red); font-weight: 700; }
+    .cross { color: var(--text-dim); }
+
+    /* BMI */
+    #bmi { background: var(--bg); }
+    .bmi-wrap {
+      max-width: 700px;
+      margin: 60px auto 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 48px;
+    }
+    .bmi-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+    .input-group { display: flex; flex-direction: column; gap: 8px; }
+    .input-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .input-field {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-size: 16px;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    .input-field:focus { border-color: var(--red); }
+    .select-field {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-size: 16px;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+      cursor: pointer;
+    }
+    .select-field:focus { border-color: var(--red); }
+    .bmi-result {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 32px;
+      text-align: center;
+      margin-top: 24px;
+    }
+    .bmi-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px;
+      line-height: 1;
+    }
+    .bmi-category {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+    .bmi-bar { height: 8px; background: var(--border); margin-top: 24px; border-radius: 4px; overflow: hidden; }
+    .bmi-bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+
+    /* TESTIMONIALS */
+    #testimonials { background: var(--bg2); }
+    .testimonials-wrap { margin-top: 60px; position: relative; }
+    .testimonial-slide {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+    .testimonial-slide.active { display: grid; grid-template-columns: 1fr 2fr; gap: 60px; align-items: center; }
+    .testimonial-img {
+      aspect-ratio: 1;
+      object-fit: cover;
+      width: 100%;
+      filter: grayscale(30%);
+      border: 3px solid var(--red);
+    }
+    .testimonial-content { padding: 40px 0; }
+    .testimonial-quote {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px;
+      color: var(--red);
+      line-height: 0.5;
+      margin-bottom: 24px;
+    }
+    .testimonial-text {
+      font-size: 20px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      font-style: italic;
+    }
+    .testimonial-author {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .testimonial-role { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+    .testimonial-stars { color: var(--gold); font-size: 18px; margin-bottom: 20px; }
+    .testimonial-nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 48px;
+    }
+    .testimonial-btn {
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .testimonial-btn:hover { background: var(--red); border-color: var(--red); }
+    .testimonial-dots { display: flex; gap: 8px; }
+    .testimonial-dot {
+      width: 24px;
+      height: 3px;
+      background: var(--border);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .testimonial-dot.active { background: var(--red); width: 48px; }
+
+    /* SIGNUP */
+    #signup { background: var(--red); position: relative; overflow: hidden; }
+    .signup-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .signup-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .signup-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 7vw, 90px);
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    .signup-desc { font-size: 18px; color: rgba(255,255,255,0.75); line-height: 1.7; }
+    .signup-form { background: rgba(0,0,0,0.25); backdrop-filter: blur(10px); padding: 40px; border: 1px solid rgba(255,255,255,0.15); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .signup-input {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      font-family: 'Barlow', sans-serif;
+      font-size: 15px;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    .signup-input::placeholder { color: rgba(255,255,255,0.5); }
+    .signup-input:focus { border-color: rgba(255,255,255,0.6); }
+    .signup-select {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      font-family: 'Barlow', sans-serif;
+      font-size: 15px;
+      padding: 14px 16px;
+      outline: none;
+      width: 100%;
+      cursor: pointer;
+    }
+    .signup-select option { background: var(--bg); color: var(--text); }
+    .btn-white {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: #fff;
+      color: var(--red);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 18px 36px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+      transition: all 0.25s;
+    }
+    .btn-white:hover { background: rgba(255,255,255,0.9); transform: translateY(-2px); }
+    .form-success {
+      text-align: center;
+      padding: 40px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .form-success-icon { font-size: 60px; margin-bottom: 16px; }
+    .form-success-title { font-family: 'Bebas Neue', sans-serif; font-size: 40px; color: #fff; margin-bottom: 12px; }
+    .form-success-text { color: rgba(255,255,255,0.75); }
+
+    /* CONTACT */
+    #contact { background: var(--bg); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 80px; margin-top: 60px; }
+    .contact-info { display: flex; flex-direction: column; gap: 32px; }
+    .contact-item { display: flex; gap: 20px; align-items: flex-start; }
+    .contact-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(232,25,44,0.1);
+      border: 1px solid rgba(232,25,44,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .contact-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 6px;
+    }
+    .contact-val { font-size: 16px; color: var(--text-muted); }
+    .map-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      height: 400px;
+    }
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .contact-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .textarea-field {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-size: 15px;
+      padding: 14px 16px;
+      outline: none;
+      resize: vertical;
+      min-height: 140px;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    .textarea-field:focus { border-color: var(--red); }
+
+    /* FOOTER */
+    footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 80px 0 40px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 60px; }
+    .footer-brand-desc { font-size: 14px; color: var(--text-muted); margin: 20px 0; line-height: 1.8; }
+    .footer-socials { display: flex; gap: 10px; }
+    .footer-social {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 16px;
+      transition: all 0.2s;
+    }
+    .footer-social:hover { background: var(--red); border-color: var(--red); color: #fff; }
+    .footer-col-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-links a {
+      font-size: 14px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .footer-links a::before { content: '→'; color: var(--red); font-size: 12px; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-copy { font-size: 13px; color: var(--text-dim); }
+
+    /* ANIMATIONS */
+    @keyframes fadeInUp {
+      from { opacity:0; transform:translateY(30px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity:0; }
+      to { opacity:1; }
+    }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    @keyframes bounce {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-8px); }
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 0 var(--red-glow); }
+      50% { box-shadow: 0 0 0 15px transparent; }
+    }
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.4s; }
+
+    /* MOBILE */
+    @media (max-width: 1024px) {
+      .grid2, .grid3, .grid4 { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .counters-grid { grid-template-columns: 1fr 1fr; }
+      .counter-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.2); }
+      .trainers-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .section { padding: 70px 0; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero-stats { display: none; }
+      .hero-scroll { display: none; }
+      .grid2, .grid3, .grid4 { grid-template-columns: 1fr; gap: 40px; }
+      .classes-grid { grid-template-columns: 1fr; }
+      .plans-grid { grid-template-columns: 1fr; }
+      .signup-inner { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .form-row, .bmi-inputs, .contact-form-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+      .trainers-grid { grid-template-columns: 1fr 1fr; }
+      .counters-grid { grid-template-columns: 1fr 1fr; }
+      .testimonial-slide.active { grid-template-columns: 1fr; }
+      .about-features { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .trainers-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-ctas { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#hero" class="logo">TITAN<span>GYM</span></a>
+    <ul class="nav-links">
+      <li><a href="#hero" class="active">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#classes">Classes</a></li>
+      <li><a href="#trainers">Trainers</a></li>
+      <li><a href="#membership">Membership</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#signup" class="btn-primary" style="padding:12px 24px">Join Now</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#hero" onclick="closeMobile()">Home</a>
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#classes" onclick="closeMobile()">Classes</a>
+  <a href="#trainers" onclick="closeMobile()">Trainers</a>
+  <a href="#membership" onclick="closeMobile()">Membership</a>
+  <a href="#bmi" onclick="closeMobile()">BMI</a>
+  <a href="#contact" onclick="closeMobile()">Contact</a>
+  <a href="#signup" onclick="closeMobile()" style="color:var(--red)">Join Now →</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      <span>Premium Fitness Experience</span>
+    </div>
+    <h1 class="hero-title">
+      FORGE<br>
+      YOUR<br>
+      <span class="red">LEGACY</span>
+    </h1>
+    <p class="hero-desc">
+      Where champions are built. Elite training, world-class coaches, and a community that pushes you beyond every limit.
+    </p>
+    <div class="hero-ctas">
+      <a href="#signup" class="btn-primary">⚡ Join Now — Free Trial</a>
+      <a href="#membership" class="btn-outline">View Plans</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">12K+</div>
+      <div class="hero-stat-label">Active Members</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">98%</div>
+      <div class="hero-stat-label">Success Rate</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">15+</div>
+      <div class="hero-stat-label">Expert Trainers</div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner" id="tickerInner">
+    <span class="ticker-item">💪 Strength Training <span class="ticker-dot"></span></span>
+    <span class="ticker-item">🔥 HIIT Classes <span class="ticker-dot"></span></span>
+    <span class="ticker-item">🥊 Boxing & MMA <span class="ticker-dot"></span></span>
+    <span class="ticker-item">🧘 Yoga & Recovery <span class="ticker-dot"></span></span>
+    <span class="ticker-item">🏆 Competition Prep <span class="ticker-dot"></span></span>
+    <span class="ticker-item">⚡ Functional Fitness <span class="ticker-dot"></span></span>
+    <span class="ticker-item">🎯 Personal Training <span class="ticker-dot"></span></span>
+    <span class="ticker-item">💪 Strength Training <span class="ticker-dot"></span></span>
+    <span class="ticker-item">🔥 HIIT Classes <span class="ticker-dot"></span></span>
+    <span class="ticker-item">🥊 Boxing & MMA <span class="ticker-dot"></span></span>
+    <span class="ticker-item">🧘 Yoga & Recovery <span class="ticker-dot"></span></span>
+    <span class="ticker-item">🏆 Competition Prep <span class="ticker-dot"></span></span>
+    <span class="ticker-item">⚡ Functional Fitness <span class="ticker-dot"></span></span>
+    <span class="ticker-item">🎯 Personal Training <span class="ticker-dot"></span></span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="grid2">
+      <div class="about-img-wrap">
+        <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80" alt="About Titan Gym" class="about-img" />
+        <div class="about-img-accent"></div>
+        <div class="about-img-badge">
+          <div class="about-img-badge-num">15+</div>
+          <div class="about-img-badge-text">Years of Excellence</div>
+        </div>
+      </div>
+      <div class="fade-in-up">
+        <div class="tag">About Titan Gym</div>
+        <h2 class="section-title">MORE THAN A<br><span class="red">GYMNASIUM</span></h2>
+        <p style="color:var(--text-muted);font-size:17px;line-height:1.8;margin-bottom:20px">
+          Founded in 2009, Titan Gym has grown from a single room to a 25,000 sq ft state-of-the-art facility. We believe fitness transforms not just bodies, but lives — forging discipline, confidence, and resilience.
+        </p>
+        <p style="color:var(--text-muted);font-size:17px;line-height:1.8;margin-bottom:36px">
+          Our certified elite trainers bring championship-level expertise to every session. Whether you're starting your journey or competing professionally, Titan Gym is your arena.
+        </p>
+        <div class="about-features">
+          <div class="about-feature">
+            <div class="about-feature-icon">🏋️</div>
+            <div>
+              <div class="about-feature-title">Elite Equipment</div>
+              <div class="about-feature-text">Latest machines & free weights</div>
+            </div>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-icon">🔬</div>
+            <div>
+              <div class="about-feature-title">Science-Based</div>
+              <div class="about-feature-text">Evidence-driven programming</div>
+            </div>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-icon">👥</div>
+            <div>
+              <div class="about-feature-title">Community</div>
+              <div class="about-feature-text">12,000+ motivated members</div>
+            </div>
+          </div>
+          <div class="about-feature">
+            <div class="about-feature-icon">🕐</div>
+            <div>
+              <div class="about-feature-title">24/7 Access</div>
+              <div class="about-feature-text">Train on your schedule</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTERS -->
+<div class="counters">
+  <div class="container">
+    <div class="counters-grid">
+      <div class="counter-item">
+        <div class="counter-num display"><span class="count-up" data-target="12000">0</span><span class="counter-suffix">+</span></div>
+        <div class="counter-label">Active Members</div>
+      </div>
+      <div class="counter-item">
+        <div class="counter-num display"><span class="count-up" data-target="45">0</span><span class="counter-suffix">+</span></div>
+        <div class="counter-label">Expert Trainers</div>
+      </div>
+      <div class="counter-item">
+        <div class="counter-num display"><span class="count-up" data-target="8500">0</span><span class="counter-suffix">+</span></div>
+        <div class="counter-label">Success Stories</div>
+      </div>
+      <div class="counter-item">
+        <div class="counter-num display"><span class="count-up" data-target="15">0</span><span class="counter-suffix"></span></div>
+        <div class="counter-label">Years in Business</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CLASSES -->
+<section class="section" id="classes">
+  <div class="container">
+    <div class="fade-in-up" style="text-align:center">
+      <div class="tag" style="border-left:none;border-right:3px solid var(--red);padding-left:0;padding-right:10px">Our Classes</div>
+      <h2 class="section-title">TRAIN LIKE A <span class="red">TITAN</span></h2>
+      <p style="color:var(--text-muted);max-width:540px;margin:0 auto;font-size:17px">From beginner to beast — we have a class that will challenge you at every level of your fitness journey.</p>
+    </div>
+    <div class="classes-grid">
+      <div class="class-card">
+        <img src="https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=600&q=80" alt="Strength Training" />
+        <div class="class-card-content">
+          <div class="class-card-tag">Power</div>
+          <div class="class-card-title">STRENGTH<br>TRAINING</div>
+          <div class="class-card-meta">60 min · All Levels · Daily</div>
+        </div>
+        <div class="class-card-arrow">→</div>
+      </div>
+      <div class="class-card">
+        <img src="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=600&q=80" alt="HIIT" />
+        <div class="class-card-content">
+          <div class="class-card-tag">Cardio</div>
+          <div class="class-card-title">HIIT<br>BLAST</div>
+          <div class="class-card-meta">45 min · Intermediate · Mon–Fri</div>
+        </div>
+        <div class="class-card-arrow">→</div>
+      </div>
+      <div class="class-card">
+        <img src="https://images.unsplash.com/photo-1555597673-b21d5c935865?w=600&q=80" alt="Boxing" />
+        <div class="class-card-content">
+          <div class="class-card-tag">Combat</div>
+          <div class="class-card-title">BOXING<br>& MMA</div>
+          <div class="class-card-meta">90 min · All Levels · Tue–Sat</div>
+        </div>
+        <div class="class-card-arrow">→</div>
+      </div>
+      <div class="class-card">
+        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&q=80" alt="Yoga" />
+        <div class="class-card-content">
+          <div class="class-card-tag">Recovery</div>
+          <div class="class-card-title">POWER<br>YOGA</div>
+          <div class="class-card-meta">60 min · Beginner · Daily</div>
+        </div>
+        <div class="class-card-arrow">→</div>
+      </div>
+      <div class="class-card">
+        <img src="https://images.unsplash.com/photo-1571388208497-71bedc66e932?w=600&q=80" alt="Cycling" />
+        <div class="class-card-content">
+          <div class="class-card-tag">Endurance</div>
+          <div class="class-card-title">CYCLE<br>XTREME</div>
+          <div class="class-card-meta">45 min · All Levels · Mon/Wed/Fri</div>
+        </div>
+        <div class="class-card-arrow">→</div>
+      </div>
+      <div class="class-card">
+        <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=600&q=80" alt="CrossFit" />
+        <div class="class-card-content">
+          <div class="class-card-tag">Functional</div>
+          <div class="class-card-title">TITAN<br>CROSS</div>
+          <div class="class-card-meta">60 min · Advanced · Tue–Sat</div>
+        </div>
+        <div class="class-card-arrow">→</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section class="section" id="schedule">
+  <div class="container">
+    <div class="fade-in-up">
+      <div class="tag">Weekly Schedule</div>
+      <h2 class="section-title">CLASS <span class="red">TIMETABLE</span></h2>
+    </div>
+    <div class="schedule-table fade-in-up delay-2">
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Class</th>
+            <th>Trainer</th>
+            <th>Day</th>
+            <th>Duration</th>
+            <th>Level</th>
+            <th>Spots</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>06:00 AM</td><td>Strength Training</td><td>Marcus Steel</td><td>Mon – Fri</td><td>60 min</td><td><span class="badge badge-green">Beginner</span></td><td>12 left</td></tr>
+          <tr><td>07:30 AM</td><td>HIIT Blast</td><td>Jordan Voss</td><td>Mon, Wed, Fri</td><td>45 min</td><td><span class="badge badge-gold">Intermediate</span></td><td>8 left</td></tr>
+          <tr><td>09:00 AM</td><td>Power Yoga</td><td>Sofia Reyes</td><td>Daily</td><td>60 min</td><td><span class="badge badge-green">Beginner</span></td><td>15 left</td></tr>
+          <tr><td>11:00 AM</td><td>Cycle Xtreme</td><td>Kane Wright</td><td>Mon, Wed, Fri</td><td>45 min</td><td><span class="badge badge-gold">Intermediate</span></td><td>5 left</td></tr>
+          <tr><td>01:00 PM</td><td>Boxing & MMA</td><td>Rico Alvarez</td><td>Tue – Sat</td><td>90 min</td><td><span class="badge badge-red">Advanced</span></td><td>6 left</td></tr>
+          <tr><td>04:00 PM</td><td>Titan Cross</td><td>Marcus Steel</td><td>Tue – Sat</td><td>60 min</td><td><span class="badge badge-red">Advanced</span></td><td>4 left</td></tr>
+          <tr><td>06:00 PM</td><td>HIIT Blast</td><td>Jordan Voss</td><td>Daily</td><td>45 min</td><td><span class="badge badge-gold">Intermediate</span></td><td>10 left</td></tr>
+          <tr><td>07:30 PM</td><td>Strength Training</td><td>Ana Powers</td><td>Mon – Sat</td><td>60 min</td><td><span class="badge badge-blue">All Levels</span></td><td>14 left</td></tr>
+          <tr><td>09:00 PM</td><td>Power Yoga</td><td>Sofia Reyes</td><td>Mon, Wed, Fri</td><td>60 min</td><td><span class="badge badge-green">Beginner</span></td><td>20 left</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- TRAINERS -->
+<section class="section" id="trainers">
+  <div class="container">
+    <div class="fade-in-up" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px">
+      <div>
+        <div class="tag">Meet the Team</div>
+        <h2 class="section-title">ELITE <span class="red">TRAINERS</span></h2>
+      </div>
+      <p style="color:var(--text-muted);max-width:360px;font-size:15px">All certified professionals with 5+ years of elite coaching experience.</p>
+    </div>
+    <div class="trainers-grid">
+      <div class="trainer-card fade-in-up">
+        <img src="https://images.unsplash.com/photo-1571731956672-f2b94d7dd0cb?w=500&q=80" alt="Marcus Steel" class="trainer-img" />
+        <div class="trainer-overlay"></div>
+        <div class="trainer-info">
+          <div class="trainer-spec">Strength & Conditioning</div>
+          <div class="trainer-name">Marcus Steel</div>
+          <div class="trainer-socials">
+            <a class="trainer-social" href="#" title="Instagram">ig</a>
+            <a class="trainer-social" href="#" title="Twitter">tw</a>
+          </div>
+        </div>
+      </div>
+      <div class="trainer-card fade-in-up delay-1">
+        <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?w=500&q=80" alt="Jordan Voss" class="trainer-img" />
+        <div class="trainer-overlay"></div>
+        <div class="trainer-info">
+          <div class="trainer-spec">HIIT & Cardio</div>
+          <div class="trainer-name">Jordan Voss</div>
+          <div class="trainer-socials">
+            <a class="trainer-social" href="#" title="Instagram">ig</a>
+            <a class="trainer-social" href="#" title="Twitter">tw</a>
+          </div>
+        </div>
+      </div>
+      <div class="trainer-card fade-in-up delay-2">
+        <img src="https://images.unsplash.com/photo-1609899537878-48a36db1b1d4?w=500&q=80" alt="Sofia Reyes" class="trainer-img" />
+        <div class="trainer-overlay"></div>
+        <div class="trainer-info">
+          <div class="trainer-spec">Yoga & Mindfulness</div>
+          <div class="trainer-name">Sofia Reyes</div>
+          <div class="trainer-socials">
+            <a class="trainer-social" href="#" title="Instagram">ig</a>
+            <a class="trainer-social" href="#" title="Twitter">tw</a>
+          </div>
+        </div>
+      </div>
+      <div class="trainer-card fade-in-up delay-3">
+        <img src="https://images.unsplash.com/photo-1567013127542-490d757e51fc?w=500&q=80" alt="Rico Alvarez" class="trainer-img" />
+        <div class="trainer-overlay"></div>
+        <div class="trainer-info">
+          <div class="trainer-spec">Boxing & MMA</div>
+          <div class="trainer-name">Rico Alvarez</div>
+          <div class="trainer-socials">
+            <a class="trainer-social" href="#" title="Instagram">ig</a>
+            <a class="trainer-social" href="#" title="Twitter">tw</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEMBERSHIP -->
+<section class="section" id="membership">
+  <div class="container">
+    <div class="fade-in-up" style="text-align:center">
+      <div class="tag" style="border-left:none;border-right:3px solid var(--red);padding-left:0;padding-right:10px">Membership Plans</div>
+      <h2 class="section-title">CHOOSE YOUR <span class="red">PLAN</span></h2>
+      <p style="color:var(--text-muted);max-width:480px;margin:0 auto;font-size:17px">No contracts. No hidden fees. Cancel anytime. Start your transformation today.</p>
+    </div>
+    <div class="plans-grid">
+      <div class="plan-card fade-in-up">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price-wrap">
+          <span class="plan-price-curr">₹</span>
+          <span class="plan-price">999</span>
+          <span class="plan-period">/ month</span>
+        </div>
+        <ul class="plan-features">
+          <li class="included"><span class="check">✓</span> Gym Access (6AM–10PM)</li>
+          <li class="included"><span class="check">✓</span> Locker & Shower</li>
+          <li class="included"><span class="check">✓</span> 2 Group Classes/Week</li>
+          <li class="included"><span class="check">✓</span> Fitness Assessment</li>
+          <li><span class="cross">✗</span> Personal Training</li>
+          <li><span class="cross">✗</span> Nutrition Plan</li>
+          <li><span class="cross">✗</span> 24/7 Access</li>
+        </ul>
+        <a href="#signup" class="btn-outline" style="width:100%;text-align:center;justify-content:center">Get Started</a>
+      </div>
+      <div class="plan-card featured fade-in-up delay-1">
+        <div class="featured-badge">Most Popular</div>
+        <div class="plan-name">Champion</div>
+        <div class="plan-price-wrap">
+          <span class="plan-price-curr">₹</span>
+          <span class="plan-price" style="color:var(--red)">1999</span>
+          <span class="plan-period">/ month</span>
+        </div>
+        <ul class="plan-features">
+          <li class="included"><span class="check">✓</span> 24/7 Gym Access</li>
+          <li class="included"><span class="check">✓</span> All Group Classes</li>
+          <li class="included"><span class="check">✓</span> 4 PT Sessions/Month</li>
+          <li class="included"><span class="check">✓</span> Nutrition Consultation</li>
+          <li class="included"><span class="check">✓</span> Body Composition Analysis</li>
+          <li class="included"><span class="check">✓</span> Sauna & Spa Access</li>
+          <li><span class="cross">✗</span> Dedicated Trainer</li>
+        </ul>
+        <a href="#signup" class="btn-primary" style="width:100%;text-align:center;justify-content:center">Join Champion</a>
+      </div>
+      <div class="plan-card fade-in-up delay-2">
+        <div class="plan-name">Titan Elite</div>
+        <div class="plan-price-wrap">
+          <span class="plan-price-curr">₹</span>
+          <span class="plan-price">3999</span>
+          <span class="plan-period">/ month</span>
+        </div>
+        <ul class="plan-features">
+          <li class="included"><span class="check">✓</span> Everything in Champion</li>
+          <li class="included"><span class="check">✓</span> Dedicated Personal Trainer</li>
+          <li class="included"><span class="check">✓</span> Unlimited PT Sessions</li>
+          <li class="included"><span class="check">✓</span> Custom Meal Plan</li>
+          <li class="included"><span class="check">✓</span> Supplement Guidance</li>
+          <li class="included"><span class="check">✓</span> VIP Locker Suite</li>
+          <li class="included"><span class="check">✓</span> Competition Prep Support</li>
+        </ul>
+        <a href="#signup" class="btn-outline" style="width:100%;text-align:center;justify-content:center">Go Elite</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BMI -->
+<section class="section" id="bmi">
+  <div class="container">
+    <div class="fade-in-up" style="text-align:center">
+      <div class="tag" style="border-left:none;border-right:3px solid var(--red);padding-left:0;padding-right:10px">Health Tools</div>
+      <h2 class="section-title">BMI <span class="red">CALCULATOR</span></h2>
+      <p style="color:var(--text-muted);max-width:480px;margin:0 auto;font-size:17px">Know your numbers. Start your journey with clarity and a plan.</p>
+    </div>
+    <div class="bmi-wrap fade-in-up delay-1">
+      <div class="bmi-inputs">
+        <div class="input-group">
+          <label class="input-label">Weight (kg)</label>
+          <input type="number" class="input-field" id="bmiWeight" placeholder="e.g. 75" min="20" max="300" />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Height (cm)</label>
+          <input type="number" class="input-field" id="bmiHeight" placeholder="e.g. 175" min="100" max="250" />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Age</label>
+          <input type="number" class="input-field" id="bmiAge" placeholder="e.g. 28" min="10" max="100" />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Gender</label>
+          <select class="select-field" id="bmiGender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="calculateBMI()" style="width:100%;justify-content:center;font-size:18px">Calculate My BMI</button>
+      <div class="bmi-result" id="bmiResult" style="display:none">
+        <div style="color:var(--text-muted);font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:8px">Your BMI Score</div>
+        <div class="bmi-num display" id="bmiNum" style="color:var(--red)">—</div>
+        <div class="bmi-category" id="bmiCat">—</div>
+        <div class="bmi-bar"><div class="bmi-bar-fill" id="bmiBarFill"></div></div>
+        <p style="margin-top:20px;color:var(--text-muted);font-size:14px" id="bmiAdvice"></p>
+        <a href="#signup" class="btn-primary" style="margin-top:24px;justify-content:center">Start My Transformation →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section" id="testimonials">
+  <div class="container">
+    <div class="fade-in-up">
+      <div class="tag">Success Stories</div>
+      <h2 class="section-title">REAL <span class="red">RESULTS</span></h2>
+    </div>
+    <div class="testimonials-wrap">
+      <div class="testimonial-slide active" id="slide-0">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80" alt="Priya S" class="testimonial-img" />
+        <div class="testimonial-content">
+          <div class="testimonial-quote">"</div>
+          <div class="testimonial-stars">★★★★★</div>
+          <div class="testimonial-text">Titan Gym completely changed my life. In 8 months, I lost 32kg, gained incredible strength, and discovered a confidence I never knew I had. The trainers here don't just coach your body — they reshape your entire mindset.</div>
+          <div class="testimonial-author">Priya Sharma</div>
+          <div class="testimonial-role">Lost 32kg · Member for 14 months</div>
+        </div>
+      </div>
+      <div class="testimonial-slide" id="slide-1">
+        <img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=500&q=80" alt="Rahul M" class="testimonial-img" />
+        <div class="testimonial-content">
+          <div class="testimonial-quote">"</div>
+          <div class="testimonial-stars">★★★★★</div>
+          <div class="testimonial-text">I went from a complete beginner to competing in my first powerlifting meet — all in under a year. Marcus Steel is an incredible coach. The community here pushes you to levels you never thought possible.</div>
+          <div class="testimonial-author">Rahul Mehta</div>
+          <div class="testimonial-role">Powerlifting Competitor · Member 11 months</div>
+        </div>
+      </div>
+      <div class="testimonial-slide" id="slide-2">
+        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&q=80" alt="Kavya N" class="testimonial-img" />
+        <div class="testimonial-content">
+          <div class="testimonial-quote">"</div>
+          <div class="testimonial-stars">★★★★★</div>
+          <div class="testimonial-text">After my second child, I thought I'd never feel athletic again. Titan Gym's team built a custom program around my recovery. 6 months later, I'm stronger than I was in my 20s. Worth every rupee!</div>
+          <div class="testimonial-author">Kavya Nair</div>
+          <div class="testimonial-role">Postpartum Transformation · Member 6 months</div>
+        </div>
+      </div>
+      <div class="testimonial-nav">
+        <button class="testimonial-btn" onclick="prevSlide()">←</button>
+        <button class="testimonial-btn" onclick="nextSlide()">→</button>
+        <div class="testimonial-dots">
+          <div class="testimonial-dot active" onclick="goSlide(0)"></div>
+          <div class="testimonial-dot" onclick="goSlide(1)"></div>
+          <div class="testimonial-dot" onclick="goSlide(2)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNUP -->
+<section class="section" id="signup">
+  <div class="signup-bg"></div>
+  <div class="container">
+    <div class="signup-inner">
+      <div class="fade-in-up">
+        <div class="tag" style="color:#fff;border-color:#fff">Start Today</div>
+        <div class="signup-title">YOUR<br>JOURNEY<br>STARTS<br>NOW</div>
+        <p class="signup-desc">Join 12,000+ members already training with the best. First 7 days are completely free.</p>
+        <div style="margin-top:32px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;gap:12px;color:rgba(255,255,255,0.85);font-size:15px">
+            <span style="color:#fff;font-size:18px">✓</span> No joining fee for new members
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;color:rgba(255,255,255,0.85);font-size:15px">
+            <span style="color:#fff;font-size:18px">✓</span> Free fitness assessment included
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;color:rgba(255,255,255,0.85);font-size:15px">
+            <span style="color:#fff;font-size:18px">✓</span> Cancel anytime, no contracts
+          </div>
+        </div>
+      </div>
+      <div id="signupFormWrap">
+        <div class="signup-form fade-in-up delay-2">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#fff;margin-bottom:28px;letter-spacing:0.04em">CLAIM FREE TRIAL</div>
+          <div class="form-row" style="margin-bottom:16px">
+            <input type="text" class="signup-input" id="sfName" placeholder="First Name" />
+            <input type="text" class="signup-input" id="sfLast" placeholder="Last Name" />
+          </div>
+          <input type="email" class="signup-input" id="sfEmail" placeholder="Email Address" style="display:block;margin-bottom:16px" />
+          <input type="tel" class="signup-input" id="sfPhone" placeholder="Phone Number" style="display:block;margin-bottom:16px" />
+          <select class="signup-select" id="sfPlan" style="display:block;margin-bottom:16px">
+            <option value="">Select Membership Plan</option>
+            <option value="starter">Starter – ₹999/mo</option>
+            <option value="champion">Champion – ₹1,999/mo</option>
+            <option value="elite">Titan Elite – ₹3,999/mo</option>
+          </select>
+          <select class="signup-select" id="sfGoal" style="display:block;margin-bottom:24px">
+            <option value="">Your Primary Goal</option>
+            <option value="weightloss">Weight Loss</option>
+            <option value="muscle">Build Muscle</option>
+            <option value="endurance">Improve Endurance</option>
+            <option value="sport">Sport Performance</option>
+            <option value="health">General Health</option>
+          </select>
+          <button class="btn-white" onclick="submitSignup()">🚀 Start Free Trial — No Credit Card</button>
+          <p style="text-align:center;font-size:12px;color:rgba(255,255,255,0.5);margin-top:12px">By joining, you agree to our Terms & Privacy Policy</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <div class="container">
+    <div class="fade-in-up" style="text-align:center">
+      <div class="tag" style="border-left:none;border-right:3px solid var(--red);padding-left:0;padding-right:10px">Get In Touch</div>
+      <h2 class="section-title">VISIT <span class="red">TITAN GYM</span></h2>
+    </div>
+    <div class="contact-grid">
+      <div>
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-icon">📍</div>
+            <div>
+              <div class="contact-label">Location</div>
+              <div class="contact-val">Plot 42, Fitness District, Adajan, Surat, Gujarat 395009</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📞</div>
+            <div>
+              <div class="contact-label">Phone</div>
+              <div class="contact-val">+91 98765 43210</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">✉️</div>
+            <div>
+              <div class="contact-label">Email</div>
+              <div class="contact-val">hello@titangym.in</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">🕐</div>
+            <div>
+              <div class="contact-label">Hours</div>
+              <div class="contact-val">Mon–Sat: 5AM – 11PM<br>Sunday: 6AM – 9PM</div>
+            </div>
+          </div>
+        </div>
+        <div class="map-container" style="margin-top:40px">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59441.47957660734!2d72.8147!3d21.1702!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be04e59411d1563%3A0xfe4558290938b042!2sSurat%2C%20Gujarat!5e0!3m2!1sen!2sin!4v1699999999999!5m2!1sen!2sin"
+            width="100%" height="400" style="border:0;display:block" allowfullscreen="" loading="lazy">
+          </iframe>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.04em;margin-bottom:28px">SEND US A MESSAGE</div>
+        <div class="contact-form">
+          <div class="contact-form-grid">
+            <input type="text" class="input-field" placeholder="Your Name" id="cName" />
+            <input type="email" class="input-field" placeholder="Email Address" id="cEmail" />
+          </div>
+          <input type="text" class="input-field" placeholder="Subject" id="cSubject" />
+          <textarea class="textarea-field" placeholder="Your message..." id="cMsg"></textarea>
+          <button class="btn-primary" onclick="submitContact()" style="justify-content:center">Send Message →</button>
+          <div id="contactSuccess" style="display:none;background:rgba(50,200,100,0.1);border:1px solid rgba(50,200,100,0.3);padding:16px;color:#32c864;font-family:'Barlow Condensed',sans-serif;letter-spacing:0.1em;text-align:center">
+            ✓ MESSAGE SENT! WE'LL REPLY WITHIN 24 HOURS.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="#hero" class="logo" style="font-size:36px">TITAN<span>GYM</span></a>
+        <p class="footer-brand-desc">Forging champions since 2009. Premium fitness facilities, elite coaching, and a community that drives results. Your legacy starts here.</p>
+        <div class="footer-socials">
+          <a class="footer-social" href="#" title="Instagram">ig</a>
+          <a class="footer-social" href="#" title="Facebook">fb</a>
+          <a class="footer-social" href="#" title="Twitter">tw</a>
+          <a class="footer-social" href="#" title="YouTube">yt</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Quick Links</div>
+        <ul class="footer-links">
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#classes">Classes</a></li>
+          <li><a href="#trainers">Our Trainers</a></li>
+          <li><a href="#membership">Membership</a></li>
+          <li><a href="#schedule">Timetable</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Programs</div>
+        <ul class="footer-links">
+          <li><a href="#">Strength Training</a></li>
+          <li><a href="#">HIIT & Cardio</a></li>
+          <li><a href="#">Boxing & MMA</a></li>
+          <li><a href="#">Yoga & Recovery</a></li>
+          <li><a href="#">Nutrition Plans</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Support</div>
+        <ul class="footer-links">
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+          <li><a href="#signup">Free Trial</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 Titan Gym. All rights reserved. Built with 💪 in Surat, India.</div>
+      <div style="display:flex;gap:20px">
+        <a href="#" style="font-size:13px;color:var(--text-dim);text-decoration:none">Privacy</a>
+        <a href="#" style="font-size:13px;color:var(--text-dim);text-decoration:none">Terms</a>
+        <a href="#" style="font-size:13px;color:var(--text-dim);text-decoration:none">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// NAV SCROLL
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+  // Active nav link
+  const sections = ['hero','about','classes','schedule','trainers','membership','bmi','testimonials','contact'];
+  const links = document.querySelectorAll('.nav-links a');
+  let current = '';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 120) current = id;
+  });
+  links.forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+  });
+});
+
+// HAMBURGER
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => {
+  mobileMenu.classList.toggle('open');
+});
+function closeMobile() {
+  mobileMenu.classList.remove('open');
+}
+
+// SCROLL REVEAL
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+
+// COUNTERS
+let counted = false;
+const counterObserver = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting && !counted) {
+    counted = true;
+    document.querySelectorAll('.count-up').forEach(el => {
+      const target = +el.dataset.target;
+      const dur = 2000;
+      const start = performance.now();
+      const update = (now) => {
+        const progress = Math.min((now - start) / dur, 1);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.floor(ease * target).toLocaleString();
+        if (progress < 1) requestAnimationFrame(update);
+      };
+      requestAnimationFrame(update);
+    });
+  }
+}, { threshold: 0.3 });
+const countersSection = document.querySelector('.counters');
+if (countersSection) counterObserver.observe(countersSection);
+
+// BMI CALCULATOR
+function calculateBMI() {
+  const w = +document.getElementById('bmiWeight').value;
+  const h = +document.getElementById('bmiHeight').value / 100;
+  if (!w || !h) { alert('Please enter your weight and height.'); return; }
+  const bmi = +(w / (h * h)).toFixed(1);
+  let cat, color, barColor, barW, advice;
+  if (bmi < 18.5) {
+    cat = 'Underweight'; color = '#3296ff'; barColor = '#3296ff'; barW = 20;
+    advice = 'You may benefit from a muscle-building program and nutrition plan. Our trainers can help you gain healthy weight.';
+  } else if (bmi < 25) {
+    cat = 'Healthy Weight'; color = '#32c864'; barColor = '#32c864'; barW = 50;
+    advice = 'Great work! Now focus on building strength and endurance. Our Champion plan can help you reach peak performance.';
+  } else if (bmi < 30) {
+    cat = 'Overweight'; color = '#ffaa00'; barColor = '#ffaa00'; barW = 70;
+    advice = 'A structured HIIT and nutrition plan can help you reach your ideal weight. Our trainers specialize in sustainable fat loss.';
+  } else {
+    cat = 'Obese'; color = '#e8192c'; barColor = '#e8192c'; barW = 90;
+    advice = 'We have guided hundreds of members on similar journeys. Our Step-Up program offers safe, supervised progress.';
+  }
+  document.getElementById('bmiNum').textContent = bmi;
+  document.getElementById('bmiNum').style.color = color;
+  document.getElementById('bmiCat').textContent = cat;
+  document.getElementById('bmiCat').style.color = color;
+  document.getElementById('bmiBarFill').style.background = barColor;
+  document.getElementById('bmiBarFill').style.width = barW + '%';
+  document.getElementById('bmiAdvice').textContent = advice;
+  document.getElementById('bmiResult').style.display = 'block';
+}
+
+// TESTIMONIALS
+let currentSlide = 0;
+const totalSlides = 3;
+function goSlide(n) {
+  document.querySelectorAll('.testimonial-slide').forEach((s, i) => {
+    s.classList.toggle('active', i === n);
+  });
+  document.querySelectorAll('.testimonial-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === n);
+  });
+  currentSlide = n;
+}
+function nextSlide() { goSlide((currentSlide + 1) % totalSlides); }
+function prevSlide() { goSlide((currentSlide - 1 + totalSlides) % totalSlides); }
+setInterval(nextSlide, 5000);
+
+// SIGNUP
+function submitSignup() {
+  const name = document.getElementById('sfName').value.trim();
+  const email = document.getElementById('sfEmail').value.trim();
+  const plan = document.getElementById('sfPlan').value;
+  if (!name || !email || !plan) { alert('Please fill in your name, email, and select a plan.'); return; }
+  document.getElementById('signupFormWrap').innerHTML = `
+    <div class="form-success">
+      <div class="form-success-icon">🎉</div>
+      <div class="form-success-title">YOU'RE IN!</div>
+      <p class="form-success-text">Welcome to Titan Gym, ${name}! Check your email for next steps. Your 7-day free trial starts now.</p>
+    </div>
+  `;
+}
+
+// CONTACT
+function submitContact() {
+  const name = document.getElementById('cName').value.trim();
+  const email = document.getElementById('cEmail').value.trim();
+  const msg = document.getElementById('cMsg').value.trim();
+  if (!name || !email || !msg) { alert('Please fill all fields.'); return; }
+  document.getElementById('contactSuccess').style.display = 'block';
+  document.getElementById('cName').value = '';
+  document.getElementById('cEmail').value = '';
+  document.getElementById('cSubject').value = '';
+  document.getElementById('cMsg').value = '';
+}
+
+// Keyboard BMI
+document.getElementById('bmiHeight').addEventListener('keypress', e => { if (e.key === 'Enter') calculateBMI(); });
+document.getElementById('bmiWeight').addEventListener('keypress', e => { if (e.key === 'Enter') calculateBMI(); });
+</script>
+</body>
+</html>
